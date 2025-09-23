@@ -1,6 +1,8 @@
-using System.Diagnostics;
-using lucas_tickets.Models;
+using eventlist.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel;
+using System.Diagnostics;
+
 
 namespace lucas_tickets.Controllers
 {
@@ -15,18 +17,24 @@ namespace lucas_tickets.Controllers
 
         public IActionResult Index()
         {
-            return View();
-        }
+            List<Events> eventlist = new List<Events>();
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+            Events events1 = new Events();
+            events1.Title = "new event";
+            events1.Description = "a new event";
+            events1.Category = 1;
+            events1.Createdate =  DateTime.Now;
+            events1.Location = "18 pine st";
+            events1.Owner = "lucas";
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            eventlist.Add(events1);
+
+            return View(eventlist);
         }
     }
 }
+
+
+
+       
+        

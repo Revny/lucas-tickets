@@ -1,4 +1,4 @@
-namespace lucas_tickets.Models
+namespace eventlist.Models
 {
     public class ErrorViewModel
     {
