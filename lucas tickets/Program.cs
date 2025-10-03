@@ -1,4 +1,9 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using lucas_tickets.Data;
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<lucas_ticketsContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("lucas_ticketsContext") ?? throw new InvalidOperationException("Connection string 'lucas_ticketsContext' not found.")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

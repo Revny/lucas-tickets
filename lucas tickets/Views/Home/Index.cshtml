@@ -1,24 +1,57 @@
-﻿@model List<eventlist.Models.Events>
+﻿@model IEnumerable<lucas_tickets.Models.Shows>
 
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Index";
 }
 
 
 
-<h1>All events</h1>
-
-@foreach (var events1 in Model)
-{
-    <div>
-        <h2>@events1.Title</h2>
-        <p>
-            @events1.Description <br />
-            @events1.Category <br />
-            @events1.Createdate <br />
-            @events1.Location <br />
-            @events1.Owner <br />
-        </p>
-
-    </div>
+<p>
+    <a asp-controller="Shows" asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            
+            <th>
+                @Html.DisplayNameFor(model => model.Createdate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Location)
+            </th>
+            
+            <th>
+                @Html.DisplayNameFor(model => model.Category)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            
+            <td>
+                @Html.DisplayFor(modelItem => item.Createdate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Location)
+            </td>
+           
+            <td>
+                @Html.DisplayFor(modelItem => item.Category.Title)
+            </td>
+            <td>
+                    <a asp-controller="Shows" asp-action="Edit" asp-route-id="@item.ShowId">Edit</a> |
+                    <a  asp-action="Details" asp-route-id="@item.ShowId">Details</a> |
+                    <a asp-controller="home" asp-action="Delete" asp-route-id="@item.ShowId">Delete</a>
+            </td>
+        </tr>
 }
+    </tbody>
+</table>

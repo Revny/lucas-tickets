@@ -1,38 +1,54 @@
-using eventlist.Models;
+
+using lucas_tickets.Data;
+using lucas_tickets.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 
 namespace lucas_tickets.Controllers
 {
     public class HomeController : Controller
+
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly lucas_ticketsContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, lucas_ticketsContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            List<Events> eventlist = new List<Events>();
+            var lucas_ticketsContext = _context.Shows.Include(s => s.Category);
 
-            Events events1 = new Events();
-            events1.Title = "new event";
-            events1.Description = "a new event";
-            events1.Category = 1;
-            events1.Createdate =  DateTime.Now;
-            events1.Location = "18 pine st";
-            events1.Owner = "lucas";
+            return View(await lucas_ticketsContext.ToListAsync());
 
-            eventlist.Add(events1);
+        }
 
-            return View(eventlist);
+        // GET: Shows/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var shows = await _context.Shows
+                .Include(s => s.Category)
+                .FirstOrDefaultAsync(m => m.ShowId == id);
+            if (shows == null)
+            {
+                return NotFound();
+            }
+
+            return View(shows);
         }
     }
-}
+    }
+
 
 
 
