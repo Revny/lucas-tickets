@@ -1,6 +1,7 @@
 
 using lucas_tickets.Data;
 using lucas_tickets.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
@@ -8,6 +9,7 @@ using System.Diagnostics;
 
 namespace lucas_tickets.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
 
     {
@@ -22,10 +24,17 @@ namespace lucas_tickets.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var lucas_ticketsContext = _context.Shows.Include(s => s.Category);
+            var show = await _context.Shows
+               .OrderByDescending(m => m.Createdate)
+               .Include(p => p.Category)
+               .ToListAsync();
 
-            return View(await lucas_ticketsContext.ToListAsync());
+            if (show == null)
+            {
+                return NotFound();
+            }
 
+            return View(show);
         }
 
         // GET: Shows/Details/5

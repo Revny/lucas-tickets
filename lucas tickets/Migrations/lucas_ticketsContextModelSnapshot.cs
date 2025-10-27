@@ -57,6 +57,10 @@ namespace lucas_tickets.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Filename")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Location")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -79,7 +83,7 @@ namespace lucas_tickets.Migrations
             modelBuilder.Entity("lucas_tickets.Models.Shows", b =>
                 {
                     b.HasOne("lucas_tickets.Models.Category", "Category")
-                        .WithMany("shows")
+                        .WithMany("Shows")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -89,7 +93,7 @@ namespace lucas_tickets.Migrations
 
             modelBuilder.Entity("lucas_tickets.Models.Category", b =>
                 {
-                    b.Navigation("shows");
+                    b.Navigation("Shows");
                 });
 #pragma warning restore 612, 618
         }

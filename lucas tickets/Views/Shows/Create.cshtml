@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create"enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
@@ -22,11 +22,11 @@
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            @* <div class="form-group">
                 <label asp-for="Createdate" class="control-label"></label>
                 <input asp-for="Createdate" class="form-control" />
                 <span asp-validation-for="Createdate" class="text-danger"></span>
-            </div>
+            </div> *@
             <div class="form-group">
                 <label asp-for="Location" class="control-label"></label>
                 <input asp-for="Location" class="form-control" />
@@ -36,6 +36,17 @@
                 <label asp-for="Owner" class="control-label"></label>
                 <input asp-for="Owner" class="form-control" />
                 <span asp-validation-for="Owner" class="text-danger"></span>
+
+            </div>
+            @* <div class="mb-3">
+                <label asp-for="Filename" class="control-label"></label>
+                <input asp-for="Filename" class="form-control" />
+                <span asp-validation-for="Filename" class="text-danger"></span>
+            </div> *@
+            <div class="mb-3">
+                <label asp-for="FormFile" class="form-label"></label>
+                <input type ="file" asp-for="FormFile" class="form-control" />
+                <span asp-validation-for="FormFile" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="CategoryId" class="control-label"></label>
@@ -49,9 +60,10 @@
 </div>
 
 <div>
-    <a asp-controller="home" asp-action= "Index">Back to List</a>
+    <a asp-controller="Home" asp-action= "Index">Back to List</a>
 </div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

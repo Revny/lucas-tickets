@@ -1,15 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using lucas_tickets.Data;
+using lucas_tickets.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using lucas_tickets.Data;
-using lucas_tickets.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace lucas_tickets.Controllers
 {
+    [Authorize]
     public class ShowsController : Controller
     {
         private readonly lucas_ticketsContext _context;
@@ -25,7 +27,7 @@ namespace lucas_tickets.Controllers
         // GET: Shows/Create
         public IActionResult Create()
         {
-            ViewData["CategoryId"] = new SelectList(_context.Set<Category>(), "CategoryId", "CategoryId");
+            ViewData["CategoryId"] = new SelectList(_context.Set<Category>(), "CategoryId", "Title");
             return View();
         }
 
@@ -34,15 +36,27 @@ namespace lucas_tickets.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ShowId,Title,Description,Createdate,Location,Owner,CategoryId")] Shows shows)
+        public async Task<IActionResult> Create([Bind("ShowId,Title,Description,Location,Owner,CategoryId,FormFile")] Shows shows)
         {
+            if (shows.FormFile != null)
+            {
+                string filename = Guid.NewGuid().ToString() + Path.GetExtension(shows.FormFile.FileName);
+                shows.Filename = filename;
+
+                string saveFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "shows", filename);
+                using (FileStream fileStream = new FileStream(saveFilePath, FileMode.Create))
+                {
+                    await shows.FormFile.CopyToAsync(fileStream);
+                }
+            }
+            shows.Createdate = DateTime.Now;
             if (ModelState.IsValid)
             {
                 _context.Add(shows);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index),"Home");
             }
-            ViewData["CategoryId"] = new SelectList(_context.Set<Category>(), "CategoryId", "CategoryId", shows.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.Set<Category>(), "CategoryId", "Title", shows.CategoryId);
             return View(shows);
         }
 
@@ -59,7 +73,7 @@ namespace lucas_tickets.Controllers
             {
                 return NotFound();
             }
-            ViewData["CategoryId"] = new SelectList(_context.Set<Category>(), "CategoryId", "CategoryId", shows.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.Set<Category>(), "CategoryId", "Title", shows.CategoryId);
             return View(shows);
         }
 
@@ -68,7 +82,7 @@ namespace lucas_tickets.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ShowId,Title,Description,Createdate,Location,Owner,CategoryId")] Shows shows)
+        public async Task<IActionResult> Edit(int id, [Bind("ShowId,Title,Description,Createdate,Filename,Location,Owner,CategoryId")] Shows shows)
         {
             if (id != shows.ShowId)
             {
@@ -130,8 +144,11 @@ namespace lucas_tickets.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), "home");
         }
+
+
+
 
         private bool ShowsExists(int id)
         {

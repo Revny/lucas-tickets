@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>lucas_tickets</RootNamespace>
+    <UserSecretsId>ea64d712-0e5f-4ed9-9465-2cf3ac438678</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

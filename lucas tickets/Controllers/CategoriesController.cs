@@ -1,15 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using lucas_tickets.Data;
+using lucas_tickets.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using lucas_tickets.Data;
-using lucas_tickets.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace lucas_tickets.Controllers
 {
+    [Authorize]
     public class CategoriesController : Controller
     {
         private readonly lucas_ticketsContext _context;

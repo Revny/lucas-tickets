@@ -1,5 +1,6 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace lucas_tickets.Models
 {
@@ -13,15 +14,16 @@ namespace lucas_tickets.Models
 
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-
-
+        public string Filename { get; set; } = string.Empty;
         public DateTime Createdate { get; set; }
         public string Location { get; set; } = string.Empty;
         public string Owner { get; set; } = string.Empty;
-        [Display(Name = "Created")]
+
         public int CategoryId { get; set; }
         public Category? Category { get; set; }
-    }
-    }
 
-
+        [NotMapped]
+        [Display(Name = "Photo")]
+        public IFormFile? FormFile { get; set; }
+    }
+}
